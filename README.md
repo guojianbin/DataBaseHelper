@@ -28,6 +28,7 @@ HelperMini，为精简版数据库操作。
 * 查询返回List泛型
 * 存储过程调用
 * 增删改,事务监听
+* 参数化查询
 
 ###<a name="diaoyong"/>调用方法
 需要先配置访问数据库连接，并在初始化中，提供配置文件根目录和连接名称。
@@ -42,12 +43,15 @@ HelperMini，为精简版数据库操作。
                                     };
           part[0].Value = "变量赋值";
           int proResult = helper.Run("存储过程名称",part);
+ 参数化查询：MySqlParameter[] par = {
+                                    new MySqlParameter("参数名称",MySqlDbType.VarChar,50)
+                                   };
+            par[0].Value = "变量赋值";
+            int addResult = helper.Run(Sql语句, CommandType.Text, par);
 ```
- 如需要执行存储过程，不带参数，则赋值null即可。
-
- 返回List泛型，必须保证实体字段名称、类型与数据库相同。
-
- 名称大小写均可。
+ 返回List泛型，必须保证实体字段名称、类型与数据库相同。名称大小写均可。
+ 
+ 
 ###数据库连接示例：
     MySql
     <add name="MySqlConfig" providerName="MySql.Data.MySqlClient" connectionString="server=*.*.*.*;user id=***;password=***;database=***" />
