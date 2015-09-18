@@ -1,0 +1,9 @@
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\bin\Debug\MultiConsole.exe.config
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\bin\Debug\MultiConsole.exe
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\bin\Debug\MultiConsole.pdb
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\bin\Debug\DbHelper.dll
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\bin\Debug\DbHelper.pdb
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\obj\Debug\MultiConsole.csprojResolveAssemblyReference.cache
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\obj\Debug\MultiConsole.exe
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\obj\Debug\MultiConsole.pdb
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\bin\Debug\MySql.Data.dll
