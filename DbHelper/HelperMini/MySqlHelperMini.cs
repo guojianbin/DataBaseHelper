@@ -11,7 +11,7 @@ using System.Configuration;
 using System.Data;
 using System.Reflection;
 
-namespace DbHelper.HelperSome
+namespace DbHelper.HelperMini
 {
     /// <summary>
     /// MySql数据库操作帮助类。
@@ -31,7 +31,7 @@ namespace DbHelper.HelperSome
         /// </summary>
         /// <param name="type">读取配置文件根目录</param>
         /// <param name="strConfig">连接字符串名称。默认“MySqlConfig”</param>
-        public MySqlHelperMini(HelperConfigType type,string strConfig = "MySqlConfig")
+        public MySqlHelperMini(HelperConfigType type, string strConfig = "MySqlConfig")
         {
             try
             {
@@ -46,7 +46,7 @@ namespace DbHelper.HelperSome
                     default:
                         break;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -132,9 +132,9 @@ namespace DbHelper.HelperSome
         /// <param name="proName">存储过程名字</param>
         /// <param name="pars">参数</param>
         /// <returns>命令类对象</returns>
-        private MySqlCommand GetCommand(string proName, MySqlParameter[] pars)
+        private MySqlCommand GetCommand(string proName, MySqlParameter[] pars, CommandType type)
         {
-            return CommandMethod(proName, CommandType.StoredProcedure, pars);
+            return CommandMethod(proName, type, pars);
         }
         #endregion
 
@@ -167,13 +167,18 @@ namespace DbHelper.HelperSome
         /// <summary>
         /// 执行增、删、改操作。无需返回集合
         /// </summary>
-        /// <param name="strProName">存储过程名称</param>
-        /// <param name="pars">存储过程参数</param>
+        /// <param name="strProName">存储过程名称或Sql语句</param>
+        /// <param name="type">类型</param>
+        /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>执行结果</returns>
-        public int Run(string strProName, MySqlParameter[] pars)
+        public int Run(string strProName, CommandType type, MySqlParameter[] pars = null)
         {
             MySqlTransaction tran = Connection.BeginTransaction();
-            MySqlCommand sqlCommand = GetCommand(strProName, pars);
+            MySqlCommand sqlCommand = null;
+            if (pars == null)
+                sqlCommand = GetCommand(strProName, type);
+            else
+                sqlCommand = GetCommand(strProName, pars, type);
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();
@@ -207,11 +212,16 @@ namespace DbHelper.HelperSome
         /// 执行存储过程，返回DataSet对象
         /// </summary>
         /// <param name="strProName">存储过程</param>
-        /// <param name="pars">参数</param>
+        /// <param name="type">类型</param>
+        /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>DataSet集合</returns>
-        public DataSet RunToDataSet(string strProName, MySqlParameter[] pars)
+        public DataSet RunToDataSet(string strProName, CommandType type, MySqlParameter[] pars = null)
         {
-            MySqlCommand cmd = GetCommand(strProName, pars);
+            MySqlCommand cmd = null;
+            if (pars == null)
+                cmd = GetCommand(strProName, type);
+            else
+                cmd = GetCommand(strProName, pars, type); 
             MySqlDataAdapter da = new MySqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -267,11 +277,17 @@ namespace DbHelper.HelperSome
         /// 执行存储过程，返回List泛型对象
         /// </summary>
         /// <typeparam name="T">泛型</typeparam>
-        /// <param name="strProName">存储过程名称</param>
-        /// <returns></returns>
-        public List<T> RunToList<T>(string strProName, MySqlParameter[] pars) where T : class,new()
+        /// <param name="strProName">存储过程名称或Sql语句</param>
+        /// <param name="type">类型</param>
+        /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
+        /// <returns>List泛型集合</returns>
+        public List<T> RunToList<T>(string strProName, CommandType type, MySqlParameter[] pars = null) where T : class,new()
         {
-            MySqlCommand cmd = GetCommand(strProName, pars);
+            MySqlCommand cmd = null;
+            if (pars == null)
+                cmd = GetCommand(strProName, type);
+            else
+                cmd = GetCommand(strProName, pars, type); 
             MySqlDataReader re = cmd.ExecuteReader();
             var list = new List<T>();
             while (re.Read())
@@ -311,5 +327,5 @@ namespace DbHelper.HelperSome
         #endregion
     }
 
-    
+
 }

@@ -7,3 +7,4 @@ E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\obj\De
 E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\obj\Debug\MultiConsole.exe
 E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\obj\Debug\MultiConsole.pdb
 E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\bin\Debug\MySql.Data.dll
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\MultiConsole\bin\Debug\System.Data.SQLite.dll

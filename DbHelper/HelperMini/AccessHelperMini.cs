@@ -1,25 +1,26 @@
 ﻿//--------------------------------------------
 // Copyright (C) 北京日升天信科技股份有限公司
-// filename :OracleHelperMini
+// filename :AccessHelperMini
 // created by 陈星宇
-// at 2015/09/18 11:59:19
+// at 2015/09/22 10:25:07
 //--------------------------------------------
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.OleDb;
+using System.Linq;
 using System.Reflection;
-using Oracle.ManagedDataAccess.Client;
-
+using System.Text;
 
 namespace DbHelper.HelperMini
 {
     /// <summary>
-    /// Oracle数据库操作帮助类。
-    /// 精简版，仅保存增删改查，存储过程，添加事务管理。
-    /// 默认数据库连接字符串名称：OracleConfig。
+    /// Access数据库操作帮助类
+    /// 精简版，仅保存增删改查，存储过程，添加事务管理
+    /// 默认数据库连接字符串名称：AccessConfig
     /// </summary>
-    public sealed class OracleHelperMini
+    public sealed class AccessHelperMini
     {
         /// <summary>
         /// 数据库连接字符串
@@ -28,11 +29,11 @@ namespace DbHelper.HelperMini
 
         /// <summary>
         /// 从Config里获取连接字符串
-        /// 字符串示例：DATA SOURCE=*.*.*.*;USER ID=***;PASSWORD=***;
+        /// 字符串示例：name="AccessConfig" providerName="Microsoft.Jet.OLEDB.4.0" connectionString="url/AccessDataBase.accdb"
         /// </summary>
         /// <param name="type">读取配置文件根目录</param>
-        /// <param name="strConfig">连接字符串名称。默认“OracleConfig”</param>
-        public OracleHelperMini(HelperConfigType type, string strConfig = "OracleConfig")
+        /// <param name="strConfig">连接字符串名称。默认“AccessConfig”</param>
+        public AccessHelperMini(HelperConfigType type, string strConfig = "AccessConfig")
         {
             try
             {
@@ -47,8 +48,6 @@ namespace DbHelper.HelperMini
                     default:
                         break;
                 }
-                connection = new OracleConnection(conn);
-                connection.Open();
             }
             catch (Exception ex)
             {
@@ -60,14 +59,14 @@ namespace DbHelper.HelperMini
         /// <summary>
         /// 数据连接对象
         /// </summary>
-        private static OracleConnection connection;
-        public static OracleConnection Connection
+        private static OleDbConnection connection;
+        public static OleDbConnection Connection
         {
             get
             {
                 if (connection == null)
                 {
-                    connection = new OracleConnection(conn);
+                    connection = new OleDbConnection(conn);
                     connection.Open();
                 }
                 else if (connection.State == ConnectionState.Broken)
@@ -79,7 +78,7 @@ namespace DbHelper.HelperMini
                 {
                     connection.Open();
                 }
-                return OracleHelperMini.connection;
+                return AccessHelperMini.connection;
             }
         }
 
@@ -97,9 +96,9 @@ namespace DbHelper.HelperMini
         /// 生成命令类
         /// </summary>
         /// <returns></returns>
-        private OracleCommand CommandMethod(string strText, CommandType type, OracleParameter[] pars = null)
+        private OleDbCommand CommandMethod(string strText, CommandType type, OleDbParameter[] pars = null)
         {
-            OracleCommand command = new OracleCommand();
+            OleDbCommand command = new OleDbCommand();
             command.Connection = Connection;
             command.CommandText = strText;
             command.CommandType = type;
@@ -112,7 +111,7 @@ namespace DbHelper.HelperMini
         /// </summary>
         /// <param name="strSql">执行SQL</param>
         /// <returns>命令类对象</returns>
-        private OracleCommand GetCommand(string strSql)
+        private OleDbCommand GetCommand(string strSql)
         {
             return CommandMethod(strSql, CommandType.Text);
         }
@@ -123,7 +122,7 @@ namespace DbHelper.HelperMini
         /// <param name="proName">存储过程名称</param>
         /// <param name="type">命令类类型。输入CommandType.StoredProcedure</param>
         /// <returns>命令类对象</returns>
-        private OracleCommand GetCommand(string proName, CommandType type)
+        private OleDbCommand GetCommand(string proName, CommandType type)
         {
             return CommandMethod(proName, type);
         }
@@ -134,7 +133,7 @@ namespace DbHelper.HelperMini
         /// <param name="proName">存储过程名字</param>
         /// <param name="pars">参数</param>
         /// <returns>命令类对象</returns>
-        private OracleCommand GetCommand(string proName, OracleParameter[] pars, CommandType type)
+        private OleDbCommand GetCommand(string proName, OleDbParameter[] pars, CommandType type)
         {
             return CommandMethod(proName, type, pars);
         }
@@ -148,8 +147,8 @@ namespace DbHelper.HelperMini
         /// <returns>执行结果</returns>
         public int Run(string strSql)
         {
-            OracleTransaction tran = Connection.BeginTransaction();
-            OracleCommand sqlCommand = GetCommand(strSql);
+            OleDbTransaction tran = Connection.BeginTransaction();
+            OleDbCommand sqlCommand = GetCommand(strSql);
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();
@@ -173,10 +172,10 @@ namespace DbHelper.HelperMini
         /// <param name="type">类型</param>
         /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>执行结果</returns>
-        public int Run(string strProName, CommandType type, OracleParameter[] pars = null)
+        public int Run(string strProName, CommandType type, OleDbParameter[] pars = null)
         {
-            OracleTransaction tran = Connection.BeginTransaction();
-            OracleCommand sqlCommand = null;
+            OleDbTransaction tran = Connection.BeginTransaction();
+            OleDbCommand sqlCommand = null;
             if (pars == null)
                 sqlCommand = GetCommand(strProName, type);
             else
@@ -203,8 +202,8 @@ namespace DbHelper.HelperMini
         /// <returns>DataSet集合</returns>
         public DataSet RunToDataSet(string strSql)
         {
-            OracleCommand cmd = GetCommand(strSql);
-            OracleDataAdapter da = new OracleDataAdapter(cmd);
+            OleDbCommand cmd = GetCommand(strSql);
+            OleDbDataAdapter da = new OleDbDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
             CloseConnection();
@@ -217,14 +216,14 @@ namespace DbHelper.HelperMini
         /// <param name="type">类型</param>
         /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>DataSet集合</returns>
-        public DataSet RunToDataSet(string strProName, CommandType type, OracleParameter[] pars = null)
+        public DataSet RunToDataSet(string strProName, CommandType type, OleDbParameter[] pars = null)
         {
-            OracleCommand cmd = null;
+            OleDbCommand cmd = null;
             if (pars == null)
                 cmd = GetCommand(strProName, type);
             else
-                cmd = GetCommand(strProName, pars, type); 
-            OracleDataAdapter da = new OracleDataAdapter(cmd);
+                cmd = GetCommand(strProName, pars, type);
+            OleDbDataAdapter da = new OleDbDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
             CloseConnection();
@@ -238,8 +237,8 @@ namespace DbHelper.HelperMini
         /// <returns>返回结果</returns>
         public List<T> RunToList<T>(string strSql) where T : class,new()
         {
-            OracleCommand cmd = GetCommand(strSql);
-            OracleDataReader re = cmd.ExecuteReader();
+            OleDbCommand cmd = GetCommand(strSql);
+            OleDbDataReader re = cmd.ExecuteReader();
             var list = new List<T>();
             while (re.Read())
             {
@@ -257,7 +256,8 @@ namespace DbHelper.HelperMini
                                 {
                                     info.SetValue(ob, re[i], null);
                                 }
-                                else {
+                                else
+                                {
                                     var resultObj = Convert.ChangeType(re[i], info.PropertyType);
                                     info.SetValue(ob, resultObj, null);
                                 }
@@ -282,14 +282,14 @@ namespace DbHelper.HelperMini
         /// <param name="type">类型</param>
         /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>List泛型集合</returns>
-        public List<T> RunToList<T>(string strProName, CommandType type, OracleParameter[] pars = null) where T : class,new()
+        public List<T> RunToList<T>(string strProName, CommandType type, OleDbParameter[] pars = null) where T : class,new()
         {
-            OracleCommand cmd = null;
+            OleDbCommand cmd = null;
             if (pars == null)
                 cmd = GetCommand(strProName, type);
             else
-                cmd = GetCommand(strProName, pars, type); 
-            OracleDataReader re = cmd.ExecuteReader();
+                cmd = GetCommand(strProName, pars, type);
+            OleDbDataReader re = cmd.ExecuteReader();
             var list = new List<T>();
             while (re.Read())
             {

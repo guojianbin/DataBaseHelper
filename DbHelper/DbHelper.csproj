@@ -16,6 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>c2563827</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,9 +43,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dll\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="SQLite.Designer">
+      <HintPath>..\dll\SQLite.Designer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dll\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,9 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HelperConfigType.cs" />
+    <Compile Include="HelperMini\AccessHelperMini.cs" />
     <Compile Include="HelperMini\MySqlHelperMini.cs" />
     <Compile Include="HelperMini\OracleHelperMini.cs" />
     <Compile Include="HelperMini\SqlHelperMini.cs" />
+    <Compile Include="HelperMini\SQLiteHelperMini.cs" />
+    <Compile Include="Helper\AccessHelper.cs" />
     <Compile Include="Helper\MySqlHelper.cs" />
     <Compile Include="Helper\OracleHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

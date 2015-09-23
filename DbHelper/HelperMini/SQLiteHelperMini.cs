@@ -1,25 +1,26 @@
 ﻿//--------------------------------------------
 // Copyright (C) 北京日升天信科技股份有限公司
-// filename :OracleHelperMini
+// filename :SQLiteHelperMini
 // created by 陈星宇
-// at 2015/09/18 11:59:19
+// at 2015/09/22 13:51:35
 //--------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.SQLite;
 using System.Configuration;
 using System.Data;
 using System.Reflection;
-using Oracle.ManagedDataAccess.Client;
-
 
 namespace DbHelper.HelperMini
 {
     /// <summary>
-    /// Oracle数据库操作帮助类。
+    /// SQLite数据库操作帮助类。
     /// 精简版，仅保存增删改查，存储过程，添加事务管理。
-    /// 默认数据库连接字符串名称：OracleConfig。
+    /// 默认数据库连接字符串名称：SQLiteConfig
     /// </summary>
-    public sealed class OracleHelperMini
+    public sealed class SQLiteHelperMini
     {
         /// <summary>
         /// 数据库连接字符串
@@ -28,11 +29,11 @@ namespace DbHelper.HelperMini
 
         /// <summary>
         /// 从Config里获取连接字符串
-        /// 字符串示例：DATA SOURCE=*.*.*.*;USER ID=***;PASSWORD=***;
+        /// 字符串示例：key="SQLiteConfig" value="Provider=System.Data.SQLite;Data Source=../../Db\SQLiteDataBase.mdb"
         /// </summary>
         /// <param name="type">读取配置文件根目录</param>
-        /// <param name="strConfig">连接字符串名称。默认“OracleConfig”</param>
-        public OracleHelperMini(HelperConfigType type, string strConfig = "OracleConfig")
+        /// <param name="strConfig">连接字符串名称。默认“SQLiteConfig”</param>
+        public SQLiteHelperMini(HelperConfigType type, string strConfig = "SQLiteConfig")
         {
             try
             {
@@ -47,7 +48,7 @@ namespace DbHelper.HelperMini
                     default:
                         break;
                 }
-                connection = new OracleConnection(conn);
+                connection = new SQLiteConnection(conn);
                 connection.Open();
             }
             catch (Exception ex)
@@ -60,14 +61,14 @@ namespace DbHelper.HelperMini
         /// <summary>
         /// 数据连接对象
         /// </summary>
-        private static OracleConnection connection;
-        public static OracleConnection Connection
+        private static SQLiteConnection connection;
+        public static SQLiteConnection Connection
         {
             get
             {
                 if (connection == null)
                 {
-                    connection = new OracleConnection(conn);
+                    connection = new SQLiteConnection(conn);
                     connection.Open();
                 }
                 else if (connection.State == ConnectionState.Broken)
@@ -79,7 +80,7 @@ namespace DbHelper.HelperMini
                 {
                     connection.Open();
                 }
-                return OracleHelperMini.connection;
+                return SQLiteHelperMini.connection;
             }
         }
 
@@ -97,9 +98,9 @@ namespace DbHelper.HelperMini
         /// 生成命令类
         /// </summary>
         /// <returns></returns>
-        private OracleCommand CommandMethod(string strText, CommandType type, OracleParameter[] pars = null)
+        private SQLiteCommand CommandMethod(string strText, CommandType type, SQLiteParameter[] pars = null)
         {
-            OracleCommand command = new OracleCommand();
+            SQLiteCommand command = new SQLiteCommand();
             command.Connection = Connection;
             command.CommandText = strText;
             command.CommandType = type;
@@ -112,7 +113,7 @@ namespace DbHelper.HelperMini
         /// </summary>
         /// <param name="strSql">执行SQL</param>
         /// <returns>命令类对象</returns>
-        private OracleCommand GetCommand(string strSql)
+        private SQLiteCommand GetCommand(string strSql)
         {
             return CommandMethod(strSql, CommandType.Text);
         }
@@ -123,7 +124,7 @@ namespace DbHelper.HelperMini
         /// <param name="proName">存储过程名称</param>
         /// <param name="type">命令类类型。输入CommandType.StoredProcedure</param>
         /// <returns>命令类对象</returns>
-        private OracleCommand GetCommand(string proName, CommandType type)
+        private SQLiteCommand GetCommand(string proName, CommandType type)
         {
             return CommandMethod(proName, type);
         }
@@ -134,7 +135,7 @@ namespace DbHelper.HelperMini
         /// <param name="proName">存储过程名字</param>
         /// <param name="pars">参数</param>
         /// <returns>命令类对象</returns>
-        private OracleCommand GetCommand(string proName, OracleParameter[] pars, CommandType type)
+        private SQLiteCommand GetCommand(string proName, SQLiteParameter[] pars, CommandType type)
         {
             return CommandMethod(proName, type, pars);
         }
@@ -148,8 +149,8 @@ namespace DbHelper.HelperMini
         /// <returns>执行结果</returns>
         public int Run(string strSql)
         {
-            OracleTransaction tran = Connection.BeginTransaction();
-            OracleCommand sqlCommand = GetCommand(strSql);
+            SQLiteTransaction tran = Connection.BeginTransaction();
+            SQLiteCommand sqlCommand = GetCommand(strSql);
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();
@@ -173,11 +174,11 @@ namespace DbHelper.HelperMini
         /// <param name="type">类型</param>
         /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>执行结果</returns>
-        public int Run(string strProName, CommandType type, OracleParameter[] pars = null)
+        public int Run(string strProName, CommandType type, SQLiteParameter[] pars = null)
         {
-            OracleTransaction tran = Connection.BeginTransaction();
-            OracleCommand sqlCommand = null;
-            if (pars == null)
+            SQLiteTransaction tran = Connection.BeginTransaction();
+            SQLiteCommand sqlCommand = null;
+            if (pars != null)
                 sqlCommand = GetCommand(strProName, type);
             else
                 sqlCommand = GetCommand(strProName, pars, type);
@@ -203,8 +204,8 @@ namespace DbHelper.HelperMini
         /// <returns>DataSet集合</returns>
         public DataSet RunToDataSet(string strSql)
         {
-            OracleCommand cmd = GetCommand(strSql);
-            OracleDataAdapter da = new OracleDataAdapter(cmd);
+            SQLiteCommand cmd = GetCommand(strSql);
+            SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
             CloseConnection();
@@ -217,14 +218,14 @@ namespace DbHelper.HelperMini
         /// <param name="type">类型</param>
         /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>DataSet集合</returns>
-        public DataSet RunToDataSet(string strProName, CommandType type, OracleParameter[] pars = null)
+        public DataSet RunToDataSet(string strProName, CommandType type, SQLiteParameter[] pars = null)
         {
-            OracleCommand cmd = null;
-            if (pars == null)
-                cmd = GetCommand(strProName, type);
+            SQLiteCommand sqlCommand = null;
+            if (pars != null)
+                sqlCommand = GetCommand(strProName, type);
             else
-                cmd = GetCommand(strProName, pars, type); 
-            OracleDataAdapter da = new OracleDataAdapter(cmd);
+                sqlCommand = GetCommand(strProName, pars, type);
+            SQLiteDataAdapter da = new SQLiteDataAdapter(sqlCommand);
             DataSet ds = new DataSet();
             da.Fill(ds);
             CloseConnection();
@@ -238,8 +239,8 @@ namespace DbHelper.HelperMini
         /// <returns>返回结果</returns>
         public List<T> RunToList<T>(string strSql) where T : class,new()
         {
-            OracleCommand cmd = GetCommand(strSql);
-            OracleDataReader re = cmd.ExecuteReader();
+            SQLiteCommand cmd = GetCommand(strSql);
+            SQLiteDataReader re = cmd.ExecuteReader();
             var list = new List<T>();
             while (re.Read())
             {
@@ -257,7 +258,8 @@ namespace DbHelper.HelperMini
                                 {
                                     info.SetValue(ob, re[i], null);
                                 }
-                                else {
+                                else
+                                {
                                     var resultObj = Convert.ChangeType(re[i], info.PropertyType);
                                     info.SetValue(ob, resultObj, null);
                                 }
@@ -282,14 +284,14 @@ namespace DbHelper.HelperMini
         /// <param name="type">类型</param>
         /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>List泛型集合</returns>
-        public List<T> RunToList<T>(string strProName, CommandType type, OracleParameter[] pars = null) where T : class,new()
+        public List<T> RunToList<T>(string strProName, CommandType type, SQLiteParameter[] pars = null) where T : class,new()
         {
-            OracleCommand cmd = null;
-            if (pars == null)
-                cmd = GetCommand(strProName, type);
+            SQLiteCommand sqlCommand = null;
+            if (pars != null)
+                sqlCommand = GetCommand(strProName, type);
             else
-                cmd = GetCommand(strProName, pars, type); 
-            OracleDataReader re = cmd.ExecuteReader();
+                sqlCommand = GetCommand(strProName, pars, type);
+            SQLiteDataReader re = sqlCommand.ExecuteReader();
             var list = new List<T>();
             while (re.Read())
             {

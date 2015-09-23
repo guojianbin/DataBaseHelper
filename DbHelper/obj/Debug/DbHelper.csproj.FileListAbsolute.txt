@@ -4,3 +4,5 @@ E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\DbHelper\bin\Debug\
 E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\DbHelper\bin\Debug\MySql.Data.dll
 E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\DbHelper\obj\Debug\DbHelper.dll
 E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\DbHelper\obj\Debug\DbHelper.pdb
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\DbHelper\bin\Debug\SQLite.Designer.dll
+E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\DbHelper\bin\Debug\System.Data.SQLite.dll

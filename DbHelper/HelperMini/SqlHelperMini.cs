@@ -18,7 +18,7 @@ namespace DbHelper.HelperMini
     /// 精简版，仅保存增删改查，存储过程，添加事务管理。
     /// 默认数据库连接字符串名称：SqlServerConfig。
     /// </summary>
-    public class SqlHelperMini
+    public sealed class SqlHelperMini
     {
         /// <summary>
         /// 数据库连接字符串
@@ -133,9 +133,9 @@ namespace DbHelper.HelperMini
         /// <param name="proName">存储过程名字</param>
         /// <param name="pars">参数</param>
         /// <returns>命令类对象</returns>
-        private SqlCommand GetCommand(string proName, SqlParameter[] pars)
+        private SqlCommand GetCommand(string proName, SqlParameter[] pars, CommandType type)
         {
-            return CommandMethod(proName, CommandType.StoredProcedure, pars);
+            return CommandMethod(proName, type, pars);
         }
         #endregion
 
@@ -168,13 +168,18 @@ namespace DbHelper.HelperMini
         /// <summary>
         /// 执行增、删、改操作。无需返回集合
         /// </summary>
-        /// <param name="strProName">存储过程名称</param>
-        /// <param name="pars">存储过程参数</param>
+        /// <param name="strProName">存储过程名称或Sql语句</param>
+        /// <param name="type">类型</param>
+        /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>执行结果</returns>
-        public int Run(string strProName, SqlParameter[] pars)
+        public int Run(string strProName, CommandType type, SqlParameter[] pars = null)
         {
             SqlTransaction tran = Connection.BeginTransaction();
-            SqlCommand sqlCommand = GetCommand(strProName, pars);
+            SqlCommand sqlCommand = null;
+            if (pars != null)
+                sqlCommand = GetCommand(strProName, type);
+            else
+                sqlCommand = GetCommand(strProName, pars, type);
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();
@@ -208,12 +213,17 @@ namespace DbHelper.HelperMini
         /// 执行存储过程，返回DataSet对象
         /// </summary>
         /// <param name="strProName">存储过程</param>
-        /// <param name="pars">参数</param>
+        /// <param name="type">类型</param>
+        /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>DataSet集合</returns>
-        public DataSet RunToDataSet(string strProName, SqlParameter[] pars)
+        public DataSet RunToDataSet(string strProName, CommandType type, SqlParameter[] pars = null)
         {
-            SqlCommand cmd = GetCommand(strProName, pars);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            SqlCommand sqlCommand = null;
+            if (pars != null)
+                sqlCommand = GetCommand(strProName, type);
+            else
+                sqlCommand = GetCommand(strProName, pars, type);
+            SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
             DataSet ds = new DataSet();
             da.Fill(ds);
             CloseConnection();
@@ -268,12 +278,18 @@ namespace DbHelper.HelperMini
         /// 执行存储过程，返回List泛型对象
         /// </summary>
         /// <typeparam name="T">泛型</typeparam>
-        /// <param name="strProName">存储过程名称</param>
-        /// <returns></returns>
-        public List<T> RunToList<T>(string strProName, SqlParameter[] pars) where T : class,new()
+        /// <param name="strProName">存储过程名称或Sql语句</param>
+        /// <param name="type">类型</param>
+        /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
+        /// <returns>List泛型集合</returns>
+        public List<T> RunToList<T>(string strProName, CommandType type, SqlParameter[] pars = null) where T : class,new()
         {
-            SqlCommand cmd = GetCommand(strProName, pars);
-            SqlDataReader re = cmd.ExecuteReader();
+            SqlCommand sqlCommand = null;
+            if (pars != null)
+                sqlCommand = GetCommand(strProName, type);
+            else
+                sqlCommand = GetCommand(strProName, pars, type);
+            SqlDataReader re = sqlCommand.ExecuteReader();
             var list = new List<T>();
             while (re.Read())
             {
