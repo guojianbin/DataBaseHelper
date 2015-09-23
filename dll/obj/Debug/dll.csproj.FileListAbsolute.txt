@@ -1,6 +1,0 @@
-E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\dll\bin\Debug\dll.exe.config
-E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\dll\bin\Debug\dll.exe
-E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\dll\bin\Debug\dll.pdb
-E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\dll\obj\Debug\dll.csprojResolveAssemblyReference.cache
-E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\dll\obj\Debug\dll.exe
-E:\workspack\VisualStudioOnlie\MultiDataBaseConnect\DbHelper\dll\obj\Debug\dll.pdb
