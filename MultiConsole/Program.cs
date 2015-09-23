@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
-using DbHelper.HelperSome;
 using System;
 using MySql.Data.MySqlClient;
 using DbHelper;
