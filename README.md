@@ -8,13 +8,12 @@
 * [完善计划](#jihua)
 
 ###<a name="jiegou"/>程序结构
-* 程序结构
- * Helper
-  * MySqlHelper
-  * SqlHelper
-  * OracleHelper
-  * AccessHelper
-  * SQLiteHelper
+* Helper
+ * MySqlHelper
+ * SqlHelper
+ * OracleHelper
+ * AccessHelper
+ * SQLiteHelper
 * HelperMini
  * MySqlHelperMini
  * SqlHelperMini
