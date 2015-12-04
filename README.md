@@ -5,7 +5,7 @@
 * [程序结构](#jiegou)
 * [功能点](#gongneng)
 * [调用方法](#diaoyong)
-* [完善计划](#jihua)
+* [NoSql和ORM](#jihua)
 
 ###<a name="jiegou"/>程序结构
 * Helper
@@ -70,9 +70,9 @@ HelperMini，为精简版数据库操作。
 
 [Oracle数据库配置教程](http://www.cnblogs.com/shengtianlong/archive/2010/07/03/1770447.html "Oracle配置教程")
 
-###<a name="jihua"/>完善计划
-* 对象关系型数据库
- * PostgreSQL（安装有点问题，先滞后）
+###<a name="jihua"/>NoSql和ORM
 * 非关系型数据库
- * Redis
- * MongoDB
+ * Redis 包含测试。关注项目 MultiWebHelper
+ * MongoDB 包含测试。关注项目 MultiWebHelper
+* ORM
+ * PetaPoco 包含测试。关注项目 MultiWebHelper
