@@ -4,15 +4,10 @@
 // created by 陈星宇
 // at 2015/07/02 11:56:57
 //--------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DbHelper
 {
-    class MySqlHelper
+    internal class MySqlHelper
     {
     }
 }

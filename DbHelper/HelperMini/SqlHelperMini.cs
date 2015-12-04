@@ -40,9 +40,11 @@ namespace DbHelper.HelperMini
                     case HelperConfigType.appSettings:
                         conn = ConfigurationManager.AppSettings[strConfig].ToString();
                         break;
+
                     case HelperConfigType.connectionStrings:
                         conn = ConfigurationManager.ConnectionStrings[strConfig].ConnectionString;
                         break;
+
                     default:
                         break;
                 }
@@ -56,10 +58,12 @@ namespace DbHelper.HelperMini
         }
 
         #region 数据库连接类模块功能
+
         /// <summary>
         /// 数据连接对象
         /// </summary>
         private static SqlConnection connection;
+
         public static SqlConnection Connection
         {
             get
@@ -89,9 +93,11 @@ namespace DbHelper.HelperMini
         {
             Connection.Close();
         }
-        #endregion
+
+        #endregion 数据库连接类模块功能
 
         #region 数据库命令类模块功能
+
         /// <summary>
         /// 生成命令类
         /// </summary>
@@ -106,6 +112,7 @@ namespace DbHelper.HelperMini
                 command.Parameters.AddRange(pars);
             return command;
         }
+
         /// <summary>
         /// 获取命令类，执行SQL
         /// </summary>
@@ -137,9 +144,11 @@ namespace DbHelper.HelperMini
         {
             return CommandMethod(proName, type, pars);
         }
-        #endregion
+
+        #endregion 数据库命令类模块功能
 
         #region 数据库帮助类调用方法
+
         /// <summary>
         /// 执行增、删、改操作。无需返回集合
         /// </summary>
@@ -165,6 +174,7 @@ namespace DbHelper.HelperMini
                 CloseConnection();
             }
         }
+
         /// <summary>
         /// 执行增、删、改操作。无需返回集合
         /// </summary>
@@ -195,6 +205,7 @@ namespace DbHelper.HelperMini
                 CloseConnection();
             }
         }
+
         /// <summary>
         /// 执行命令，返回DataSet对象
         /// </summary>
@@ -209,6 +220,7 @@ namespace DbHelper.HelperMini
             CloseConnection();
             return ds;
         }
+
         /// <summary>
         /// 执行存储过程，返回DataSet对象
         /// </summary>
@@ -229,13 +241,14 @@ namespace DbHelper.HelperMini
             CloseConnection();
             return ds;
         }
+
         /// <summary>
         /// 执行命令，返回List泛型对象
         /// </summary>
         /// <typeparam name="T">泛型对象</typeparam>
         /// <param name="strSql">Sql语句</param>
         /// <returns>返回结果</returns>
-        public List<T> RunToList<T>(string strSql) where T : class,new()
+        public List<T> RunToList<T>(string strSql) where T : class, new()
         {
             SqlCommand cmd = GetCommand(strSql);
             SqlDataReader re = cmd.ExecuteReader();
@@ -274,6 +287,7 @@ namespace DbHelper.HelperMini
             CloseConnection();
             return list;
         }
+
         /// <summary>
         /// 执行存储过程，返回List泛型对象
         /// </summary>
@@ -282,7 +296,7 @@ namespace DbHelper.HelperMini
         /// <param name="type">类型</param>
         /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>List泛型集合</returns>
-        public List<T> RunToList<T>(string strProName, CommandType type, SqlParameter[] pars = null) where T : class,new()
+        public List<T> RunToList<T>(string strProName, CommandType type, SqlParameter[] pars = null) where T : class, new()
         {
             SqlCommand sqlCommand = null;
             if (pars != null)
@@ -325,6 +339,62 @@ namespace DbHelper.HelperMini
             CloseConnection();
             return list;
         }
-        #endregion
+
+        #endregion 数据库帮助类调用方法
+
+        #region 数据库其它帮助方法
+
+        /// <summary>
+        /// 获得数据库中所有表
+        /// </summary>
+        /// <returns>数据表</returns>
+        public List<TableAll> GetTableAll()
+        {
+            return RunToList<TableAll>("select name from sysobjects where xtype='u'");
+        }
+
+        /// <summary>
+        /// 获得数据库中所有表中没有主键的表
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetTableNotPk()
+        {
+            List<string> list = new List<string>();
+            List<TableAll> listAll = GetTableAll();
+            foreach (var li in listAll)
+            {
+                DataSet ds = RunToDataSet("EXEC sp_pkeys @table_name='" + li.name + "'");
+                if (ds.Tables[0].Rows.Count == 0)
+                    list.Add(li.name);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 获得数据库中所有表中有主键的表
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetTablePk()
+        {
+            List<string> list = new List<string>();
+            List<TableAll> listAll = GetTableAll();
+            foreach (var li in listAll)
+            {
+                DataSet ds = RunToDataSet("EXEC sp_pkeys @table_name='" + li.name + "'");
+                if (ds.Tables[0].Rows.Count > 0)
+                    list.Add(li.name);
+            }
+            return list;
+        }
+
+        #endregion 数据库其它帮助方法
+    }
+
+    /// <summary>
+    /// 数据表公共字段
+    /// </summary>
+    public sealed class TableAll
+    {
+        public string name { get; set; }
     }
 }

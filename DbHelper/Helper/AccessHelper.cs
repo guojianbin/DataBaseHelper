@@ -4,14 +4,10 @@
 // created by 陈星宇
 // at 2015/09/22 10:25:34
 //--------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DbHelper.Helper
 {
-    class AccessHelper
+    internal class AccessHelper
     {
     }
 }

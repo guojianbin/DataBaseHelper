@@ -1,20 +1,15 @@
-﻿
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
-using System.Data.SqlClient;
-using System;
-using MySql.Data.MySqlClient;
-using DbHelper;
+﻿using DbHelper;
 using DbHelper.HelperMini;
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace MultiConsole
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //OracleHelperMini Ohelper = new OracleHelperMini(HelperConfigType.appSettings);
             //var surl = Ohelper.RunToList<YewuKdhm>("select t.*, t.rowid from YEWU_KDHM t");
@@ -67,7 +62,7 @@ namespace MultiConsole
             ////测试存储过程，带返回值，带参数的存储过程
             //Console.WriteLine("开始测试带返回值的存储过程");
             //MySqlParameter[] part = {
-            //                          new MySqlParameter("DictName",MySqlDbType.VarChar,50) 
+            //                          new MySqlParameter("DictName",MySqlDbType.VarChar,50)
             //                        };
             //part[0].Value = "测试名称";
             //int proResult = helper.Run("AddDict", part, CommandType.StoredProcedure);

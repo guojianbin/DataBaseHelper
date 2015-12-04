@@ -5,10 +5,6 @@
 // at 2015/09/22 13:39:19
 //--------------------------------------------
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MultiConsole
 {

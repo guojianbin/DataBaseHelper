@@ -40,13 +40,14 @@ namespace DbHelper.HelperMini
                     case HelperConfigType.appSettings:
                         conn = ConfigurationManager.AppSettings[strConfig].ToString();
                         break;
+
                     case HelperConfigType.connectionStrings:
                         conn = ConfigurationManager.ConnectionStrings[strConfig].ConnectionString;
                         break;
+
                     default:
                         break;
                 }
-
             }
             catch (Exception ex)
             {
@@ -55,10 +56,12 @@ namespace DbHelper.HelperMini
         }
 
         #region 数据库连接类模块功能
+
         /// <summary>
         /// 数据连接对象
         /// </summary>
         private static MySqlConnection connection;
+
         public static MySqlConnection Connection
         {
             get
@@ -88,9 +91,11 @@ namespace DbHelper.HelperMini
         {
             Connection.Close();
         }
-        #endregion
+
+        #endregion 数据库连接类模块功能
 
         #region 数据库命令类模块功能
+
         /// <summary>
         /// 生成命令类
         /// </summary>
@@ -105,6 +110,7 @@ namespace DbHelper.HelperMini
                 command.Parameters.AddRange(pars);
             return command;
         }
+
         /// <summary>
         /// 获取命令类，执行SQL
         /// </summary>
@@ -136,9 +142,11 @@ namespace DbHelper.HelperMini
         {
             return CommandMethod(proName, type, pars);
         }
-        #endregion
+
+        #endregion 数据库命令类模块功能
 
         #region 数据库帮助类调用方法
+
         /// <summary>
         /// 执行增、删、改操作。无需返回集合
         /// </summary>
@@ -164,6 +172,7 @@ namespace DbHelper.HelperMini
                 CloseConnection();
             }
         }
+
         /// <summary>
         /// 执行增、删、改操作。无需返回集合
         /// </summary>
@@ -194,6 +203,7 @@ namespace DbHelper.HelperMini
                 CloseConnection();
             }
         }
+
         /// <summary>
         /// 执行命令，返回DataSet对象
         /// </summary>
@@ -208,6 +218,7 @@ namespace DbHelper.HelperMini
             CloseConnection();
             return ds;
         }
+
         /// <summary>
         /// 执行存储过程，返回DataSet对象
         /// </summary>
@@ -221,20 +232,21 @@ namespace DbHelper.HelperMini
             if (pars == null)
                 cmd = GetCommand(strProName, type);
             else
-                cmd = GetCommand(strProName, pars, type); 
+                cmd = GetCommand(strProName, pars, type);
             MySqlDataAdapter da = new MySqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
             CloseConnection();
             return ds;
         }
+
         /// <summary>
         /// 执行命令，返回List泛型对象
         /// </summary>
         /// <typeparam name="T">泛型对象</typeparam>
         /// <param name="strSql">Sql语句</param>
         /// <returns>返回结果</returns>
-        public List<T> RunToList<T>(string strSql) where T : class,new()
+        public List<T> RunToList<T>(string strSql) where T : class, new()
         {
             MySqlCommand cmd = GetCommand(strSql);
             MySqlDataReader re = cmd.ExecuteReader();
@@ -273,6 +285,7 @@ namespace DbHelper.HelperMini
             CloseConnection();
             return list;
         }
+
         /// <summary>
         /// 执行存储过程，返回List泛型对象
         /// </summary>
@@ -281,13 +294,13 @@ namespace DbHelper.HelperMini
         /// <param name="type">类型</param>
         /// <param name="pars">可选参数，填写此参数。可以进行参数化Sql查询</param>
         /// <returns>List泛型集合</returns>
-        public List<T> RunToList<T>(string strProName, CommandType type, MySqlParameter[] pars = null) where T : class,new()
+        public List<T> RunToList<T>(string strProName, CommandType type, MySqlParameter[] pars = null) where T : class, new()
         {
             MySqlCommand cmd = null;
             if (pars == null)
                 cmd = GetCommand(strProName, type);
             else
-                cmd = GetCommand(strProName, pars, type); 
+                cmd = GetCommand(strProName, pars, type);
             MySqlDataReader re = cmd.ExecuteReader();
             var list = new List<T>();
             while (re.Read())
@@ -324,8 +337,7 @@ namespace DbHelper.HelperMini
             CloseConnection();
             return list;
         }
-        #endregion
+
+        #endregion 数据库帮助类调用方法
     }
-
-
 }

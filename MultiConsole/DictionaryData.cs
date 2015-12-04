@@ -4,11 +4,6 @@
 // created by 陈星宇
 // at 2015/09/18 11:19:28
 //--------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MultiConsole
 {
