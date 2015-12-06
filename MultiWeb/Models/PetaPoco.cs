@@ -31,16 +31,16 @@ using System.Threading;
 namespace PetaPoco
 {
     /// <summary>
-    /// The main PetaPoco Database class.  You can either use this class directly, or derive from it.
+    /// 主要PetaPoco数据库类。你可以直接使用这个类,或者来源于它。
     /// </summary>
     public class Database : IDisposable
     {
         #region Constructors
 
         /// <summary>
-        /// Construct a database using a supplied IDbConnection
+        /// 构造一个数据库使用IDbConnection提供
         /// </summary>
-        /// <param name="connection">The IDbConnection to use</param>
+        /// <param name="connection"> IDbConnection使用</param>
         /// <remarks>
         /// The supplied IDbConnection will not be closed/disposed by PetaPoco - that remains
         /// the responsibility of the caller.
@@ -54,7 +54,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Construct a database using a supplied connections string and optionally a provider name
+        /// 构建一个数据库使用提供连接字符串,并选择一个供应商的名字
         /// </summary>
         /// <param name="connectionString">The DB connection string</param>
         /// <param name="providerName">The name of the DB provider to use</param>
@@ -69,7 +69,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Construct a Database using a supplied connection string and a DbProviderFactory
+        /// 构建一个数据库使用提供连接字符串和一个DbProviderFactory
         /// </summary>
         /// <param name="connectionString">The connection string to use</param>
         /// <param name="provider">The DbProviderFactory to use for instantiating IDbConnection's</param>
@@ -81,7 +81,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Construct a Database using a supplied connectionString Name.  The actual connection string and provider will be
+        /// 构建一个数据库使用connectionString提供名称。实际的连接字符串和提供者
         /// read from app/web.config.
         /// </summary>
         /// <param name="connectionStringName">The name of the connection</param>
@@ -110,7 +110,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Provides common initialization for the various constructors
+        /// 提供了常见的各种构造函数初始化
         /// </summary>
         private void CommonConstruct()
         {
@@ -136,7 +136,7 @@ namespace PetaPoco
         #region IDisposable
 
         /// <summary>
-        /// Automatically close one open shared connection
+        /// 自动关闭一个开放共享连接
         /// </summary>
         public void Dispose()
         {
@@ -150,7 +150,7 @@ namespace PetaPoco
         #region Connection Management
 
         /// <summary>
-        /// When set to true the first opened connection is kept alive until this object is disposed
+        /// 当设置为true的第一个打开连接保持活着,直到这个对象处理
         /// </summary>
         public bool KeepConnectionAlive
         {
@@ -159,7 +159,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Open a connection that will be used for all subsequent queries.
+        /// 打开一个连接,将用于所有后续查询。
         /// </summary>
         /// <remarks>
         /// Calls to Open/CloseSharedConnection are reference counted and should be balanced
@@ -186,7 +186,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Releases the shared connection
+        /// 发布共享连接
         /// </summary>
         public void CloseSharedConnection()
         {
@@ -203,7 +203,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Provides access to the currently open shared connection (or null if none)
+        /// 提供当前打开共享连接(或零如果没有)
         /// </summary>
         public IDbConnection Connection
         {
@@ -217,7 +217,7 @@ namespace PetaPoco
         // Helper to create a transaction scope
 
         /// <summary>
-        /// Starts or continues a transaction.
+        /// 开始或继续交易。
         /// </summary>
         /// <returns>An ITransaction reference that must be Completed or disposed</returns>
         /// <remarks>
@@ -258,7 +258,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Starts a transaction scope, see GetTransaction() for recommended usage
+        /// 启动一个事务范围,看到GetTransaction()推荐使用
         /// </summary>
         public void BeginTransaction()
         {
@@ -274,7 +274,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Internal helper to cleanup transaction
+        /// 内部辅助清除事务
         /// </summary>
         private void CleanupTransaction()
         {
@@ -292,7 +292,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Aborts the entire outer most transaction scope
+        /// 中止整个外大多数事务范围
         /// </summary>
         /// <remarks>
         /// Called automatically by Transaction.Dispose()
@@ -306,7 +306,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Marks the current transaction scope as complete.
+        /// 标志着完成当前事务范围。
         /// </summary>
         public void CompleteTransaction()
         {
@@ -319,7 +319,7 @@ namespace PetaPoco
         #region Command Management
 
         /// <summary>
-        /// Add a parameter to a DB command
+        /// 将一个参数添加到数据库命令
         /// </summary>
         /// <param name="cmd">A reference to the IDbCommand to which the parameter is to be added</param>
         /// <param name="value">The value to assign to the parameter</param>
@@ -448,7 +448,7 @@ namespace PetaPoco
         #region Exception Reporting and Logging
 
         /// <summary>
-        /// Called if an exception occurs during processing of a DB operation.  Override to provide custom logging/handling.
+        /// 称如果一个例外发生在数据库操作的处理。覆盖提供自定义日志/处理。
         /// </summary>
         /// <param name="x">The exception instance</param>
         /// <returns>True to re-throw the exception, false to suppress it</returns>
@@ -460,7 +460,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Called when DB connection opened
+        /// 时调用数据库连接打开
         /// </summary>
         /// <param name="conn">The newly opened IDbConnection</param>
         /// <returns>The same or a replacement IDbConnection</returns>
@@ -474,7 +474,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Called when DB connection closed
+        /// 时调用DB连接关闭
         /// </summary>
         /// <param name="conn">The soon to be closed IDBConnection</param>
         public virtual void OnConnectionClosing(IDbConnection conn)
@@ -482,7 +482,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Called just before an DB command is executed
+        /// 只是在执行命令之前一个DB
         /// </summary>
         /// <param name="cmd">The command to be executed</param>
         /// <remarks>
@@ -494,7 +494,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Called on completion of command execution
+        /// 要求完成命令执行
         /// </summary>
         /// <param name="cmd">The IDbCommand that finished executing</param>
         public virtual void OnExecutedCommand(IDbCommand cmd)
@@ -506,7 +506,7 @@ namespace PetaPoco
         #region operation: Execute
 
         /// <summary>
-        /// Executes a non-query command
+        /// 执行一个non-query命令
         /// </summary>
         /// <param name="sql">The SQL statement to execute</param>
         /// <param name="args">Arguments to any embedded parameters in the SQL</param>
@@ -539,7 +539,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Executes a non-query command
+        /// 执行一个non-query命令
         /// </summary>
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
         /// <returns>The number of rows affected</returns>
@@ -553,7 +553,7 @@ namespace PetaPoco
         #region operation: ExecuteScalar
 
         /// <summary>
-        /// Executes a query and return the first column of the first row in the result set.
+        /// 执行一个查询,返回第一行第一列的结果集。
         /// </summary>
         /// <typeparam name="T">The type that the result value should be cast to</typeparam>
         /// <param name="sql">The SQL query to execute</param>
@@ -593,7 +593,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Executes a query and return the first column of the first row in the result set.
+        /// 执行一个查询,返回第一行第一列的结果集。
         /// </summary>
         /// <typeparam name="T">The type that the result value should be cast to</typeparam>
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
@@ -608,7 +608,7 @@ namespace PetaPoco
         #region operation: Fetch
 
         /// <summary>
-        /// Runs a query and returns the result set as a typed list
+        /// 运行查询并返回结果集类型列表
         /// </summary>
         /// <typeparam name="T">The Type representing a row in the result set</typeparam>
         /// <param name="sql">The SQL query to execute</param>
@@ -620,7 +620,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Runs a query and returns the result set as a typed list
+        /// 运行查询并返回结果集类型列表
         /// </summary>
         /// <typeparam name="T">The Type representing a row in the result set</typeparam>
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
@@ -635,7 +635,7 @@ namespace PetaPoco
         #region operation: Page
 
         /// <summary>
-        /// Starting with a regular SELECT statement, derives the SQL statements required to query a
+        /// 从常规的SELECT语句,获取查询所需的SQL语句
         /// DB for a page of records and the total number of records
         /// </summary>
         /// <typeparam name="T">The Type representing a row in the result set</typeparam>
@@ -661,7 +661,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Retrieves a page of records	and the total number of available records
+        /// 检索页面的记录和可用的总数记录
         /// </summary>
         /// <typeparam name="T">The Type representing a row in the result set</typeparam>
         /// <param name="page">The 1 based page number to retrieve</param>
@@ -702,7 +702,7 @@ namespace PetaPoco
         }
 
         /// <summary>
-        /// Retrieves a page of records	and the total number of available records
+        /// 检索页面的记录和可用的总数记录
         /// </summary>
         /// <typeparam name="T">The Type representing a row in the result set</typeparam>
         /// <param name="page">The 1 based page number to retrieve</param>
