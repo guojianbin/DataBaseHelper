@@ -158,6 +158,7 @@ namespace DbHelper.HelperMini
         {
             SQLiteTransaction tran = Connection.BeginTransaction();
             SQLiteCommand sqlCommand = GetCommand(strSql);
+            sqlCommand.Transaction = tran;
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();
@@ -190,6 +191,7 @@ namespace DbHelper.HelperMini
                 sqlCommand = GetCommand(strProName, type);
             else
                 sqlCommand = GetCommand(strProName, pars, type);
+            sqlCommand.Transaction = tran;
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();

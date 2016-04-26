@@ -156,6 +156,7 @@ namespace DbHelper.HelperMini
         {
             MySqlTransaction tran = Connection.BeginTransaction();
             MySqlCommand sqlCommand = GetCommand(strSql);
+            sqlCommand.Transaction = tran;
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();
@@ -188,6 +189,7 @@ namespace DbHelper.HelperMini
                 sqlCommand = GetCommand(strProName, type);
             else
                 sqlCommand = GetCommand(strProName, pars, type);
+            sqlCommand.Transaction = tran;
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();

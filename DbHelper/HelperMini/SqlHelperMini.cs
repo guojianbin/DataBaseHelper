@@ -158,13 +158,14 @@ namespace DbHelper.HelperMini
         {
             SqlTransaction tran = Connection.BeginTransaction();
             SqlCommand sqlCommand = GetCommand(strSql);
+            sqlCommand.Transaction = tran;
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();
                 tran.Commit();
                 return result;
             }
-            catch
+            catch (Exception ex)
             {
                 tran.Rollback();
                 return -1;
@@ -190,6 +191,7 @@ namespace DbHelper.HelperMini
                 sqlCommand = GetCommand(strProName, type);
             else
                 sqlCommand = GetCommand(strProName, pars, type);
+            sqlCommand.Transaction = tran;
             try
             {
                 int result = sqlCommand.ExecuteNonQuery();
