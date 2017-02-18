@@ -90,12 +90,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\Generated\PetaPoco.Generator.ttinclude" />
-    <Content Include="Models\Generated\PetaPoco.Core.ttinclude" />
-    <Content Include="Models\Generated\Database.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Database.cs</LastGenOutput>
-    </Content>
     <Content Include="MongoDBTest.aspx" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
@@ -111,11 +105,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Generated\Database.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Database.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="MongoDBHelperMini.cs" />
     <Compile Include="MongoDBTest.aspx.cs">
